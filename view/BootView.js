@@ -3,52 +3,16 @@
  * 1、TextInput的使用
  * 2、根据平台获取组件
  * 3、PropTypes
+ * 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
+ * 4、ActivityIndicator: 进度条
  */
 import React, { Component } from 'react';
-import { Alert, Image, Modal, View, Platform, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { ActivityIndicator, Alert, Image, Modal, View, Platform, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 // 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
-import PropTypes from 'prop-types';
-import * as Progress from 'react-native-progress';
 
 import Util from './utils';
-
-/**
- * 根据平台，选择不同的登录按钮样式
- */
-class PlatformBtn extends Component {
-
-    static propTypes = {
-        onPress: PropTypes.func.isRequired,
-        btnStyle: PropTypes.object,
-        btnText: PropTypes.string,
-    };
-
-    static defaultValue = {
-        btnText: "",
-    };
-
-    constructor(props) {
-      super(props);
-    }
-
-    render() {
-        if (Platform.OS === 'ios') {
-            return(
-                <TouchableHighlight onPress={() => this.props.onPress} style={this.props.btnStyle}>
-                    <Text style={{fontSize: 16, color: "#fff"}}>{this.props.btnText}</Text>
-                </TouchableHighlight>
-            )
-        } else {
-            return(
-                <TouchableOpacity onPress={() => this.state.onPress} style={this.state.btnStyle}>
-                    <Text style={{fontSize: 16, color: "#fff"}}>{this.props.btnText}</Text>
-                </TouchableOpacity>
-            )
-        }
-    }
-}
 
 export default class BootView extends Component {
     constructor(props) {
@@ -59,6 +23,7 @@ export default class BootView extends Component {
             showClearUsernameBtn: false,
             showClearPasswordBtn: false,
             loginBtnColor: '#ccc',
+            loginLoading: false,
         }
     };
 
@@ -105,6 +70,21 @@ export default class BootView extends Component {
      * @private
      */
     async _login() {
+        if (this.state.username === '' || this.state.password === '') {
+            Alert.alert("请输入用户名和密码");
+            return;
+        }
+
+        // 如果正在登录，则不进行任何处理
+        if (this.state.loginLoading) {
+            return;
+        }
+
+        // 显示登录按钮上的进度条
+        this.setState({
+            loginLoading: true,
+        });
+
         let loginResponse = await fetch("http://localhost:8082/login", {
                 method: "POST",
                 headers: {
@@ -123,6 +103,11 @@ export default class BootView extends Component {
             .catch(error => {
                 console.error(error);
             });
+
+        // 隐藏登录按钮上的进度条
+        this.setState({
+            loginLoading: false,
+        });
 
         if (loginResponse.code === 200) {
             Alert.alert("登录成功");
@@ -272,8 +257,10 @@ export default class BootView extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => this._login()} style={{backgroundColor: this.state.loginBtnColor, borderRadius: 2, marginLeft: 20, marginRight: 20, marginTop: 40, flexDirection: "row",
-                        justifyContent: "center", alignItems: "center", paddingTop: 10, paddingBottom: 10}}>
+                    <TouchableOpacity onPress={() => this._login()} style={styles.loginBtn}>
+                        <View style={{flexDirection: "row"}}>
+                            {this.state.loginLoading ? <ActivityIndicator size={"small"}/> : null}
+                        </View>
                         <Text style={{fontSize: 16, color: "#fff"}}>登 录</Text>
                     </TouchableOpacity>
 
@@ -325,7 +312,7 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         paddingBottom: 0
     },
-    btnStyle: {
+    loginBtn: {
         //backgroundColor: this.state.loginBtnColor,
         backgroundColor: "#ccc",
         borderRadius: 2,
