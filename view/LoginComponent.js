@@ -14,12 +14,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import Util from './utils';
 
-export default class BootView extends Component {
+export default class LoginComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
+            username: 'Teemo',
+            password: '123456',
             showClearUsernameBtn: false,
             showClearPasswordBtn: false,
             loginBtnColor: '#ccc',
@@ -27,6 +27,10 @@ export default class BootView extends Component {
         }
     };
 
+    /**
+     * 清除用户名
+     * @private
+     */
     _clearUsername() {
         this.setState({
             username: '',
@@ -35,6 +39,10 @@ export default class BootView extends Component {
         })
     }
 
+    /**
+     * 清除密码
+     * @private
+     */
     _clearPassword() {
         this.setState({
             password: '',
@@ -98,10 +106,19 @@ export default class BootView extends Component {
             })
             .then(response => response.json())
             .then(responseJson => {
-                return responseJson;
+                if (responseJson != null && responseJson.code === 200) {
+                    return responseJson;
+                } else {
+                    Alert.alert(responseJson == null ? "登录失败" : responseJson.des);
+                }
             })
             .catch(error => {
-                console.error(error);
+                this.setState({
+                    loginLoading: false
+                });
+
+                console.info(error.toString());
+                Alert.alert("登录失败");
             });
 
         // 隐藏登录按钮上的进度条
@@ -257,9 +274,9 @@ export default class BootView extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => this._login()} style={styles.loginBtn}>
+                    <TouchableOpacity onPress={() => this._login()} style={[styles.loginBtn, {backgroundColor: this.state.loginBtnColor}]}>
                         <View style={{flexDirection: "row"}}>
-                            {this.state.loginLoading ? <ActivityIndicator size={"small"}/> : null}
+                            {this.state.loginLoading ? <ActivityIndicator size={"small"} color={"#fff"}/> : null}
                         </View>
                         <Text style={{fontSize: 16, color: "#fff"}}>登 录</Text>
                     </TouchableOpacity>
@@ -313,7 +330,6 @@ const styles = StyleSheet.create({
         paddingBottom: 0
     },
     loginBtn: {
-        //backgroundColor: this.state.loginBtnColor,
         backgroundColor: "#ccc",
         borderRadius: 2,
         marginLeft: 20,
