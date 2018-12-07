@@ -5,6 +5,7 @@
  * 3、PropTypes
  * 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
  * 4、ActivityIndicator: 进度条
+ * 5、React-Navigation的使用：使用时需要关联react-native-gesture-handler，如果有native代码需要在Android和IOS中进行配置，详见官网
  */
 import React, { Component } from 'react';
 import { ActivityIndicator, Alert, Image, Modal, View, Platform, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
@@ -12,9 +13,19 @@ import { ActivityIndicator, Alert, Image, Modal, View, Platform, Text, TextInput
 import Icon from 'react-native-vector-icons/Ionicons';
 // 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
 
-import Util from './utils';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-export default class LoginComponent extends Component {
+import Util from './utils';
+import HomeView from "./HomeView";
+
+export class LoginComponent extends Component {
+
+    // 定制该模块的标题栏
+    static navigationOptions = {
+        // 隐藏标题栏
+        header: null
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -93,7 +104,7 @@ export default class LoginComponent extends Component {
             loginLoading: true,
         });
 
-        let loginResponse = await fetch("http://localhost:8082/login", {
+        let loginResponse = await fetch("http://www.michat.ttsource.cn/login", {
                 method: "POST",
                 headers: {
                   Accept: "application/json",
@@ -127,7 +138,9 @@ export default class LoginComponent extends Component {
         });
 
         if (loginResponse.code === 200) {
-            Alert.alert("登录成功");
+            //Alert.alert("登录成功");
+            // 用 Home页面来替换当前路由
+            this.props.navigation.replace("Home");
         }
     }
 
@@ -296,6 +309,27 @@ export default class LoginComponent extends Component {
                     </View>
                 </View>
             </View>
+        );
+    }
+}
+
+const LoginStack = createStackNavigator(
+    {
+        Login: LoginComponent,
+        Home: HomeView,
+    },
+    {
+        initialRouteName: "Login"
+    }
+);
+
+
+const AppContainer = createAppContainer(LoginStack);
+
+export default class App extends Component {
+    render() {
+        return(
+            <AppContainer/>
         );
     }
 }
