@@ -178,7 +178,7 @@ const Util = {
         white : "#FFFFFF",	        //	白色
         whitesmoke  : "#F5F5F5",	    //	白色的烟
         yellow  : "#FFFF00",	        //	黄色
-        yellowgreen : "#9ACD3",	    //	黄绿色
+        yellowgreen : "#9ACD36",	    //	黄绿色
     },
     dimension: {
         content_text_size_20: 20,

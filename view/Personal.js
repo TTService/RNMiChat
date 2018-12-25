@@ -10,7 +10,11 @@
 import React, { Component } from 'react';
 import {AsyncStorage, Image, View, Platform, ScrollView, Text, StyleSheet } from 'react-native';
 
+
+import {Icon, ListItem} from 'react-native-elements';
+
 import Util from './utils';
+import { Crown } from './../util/svgIcon';
 
 
 export class PersonalInfo extends Component {
@@ -132,8 +136,68 @@ export default class extends Component {
 
     render() {
         return(
-            <ScrollView>
+            <ScrollView style={{backgroundColor: "#f4f4f4"}}>
                 <PersonalInfo/>
+
+                <View>
+                    <ListItem
+                        containerStyle={{backgroundColor: "#fefefe", marginTop: 8}}
+                        leftIcon={<Icon name='money' type='font-awesome' color='#A9A9A9' size={30}/>}
+                        title={"充值服务"}
+                        titleStyle={styles.itemTitle}
+                        subtitle={"让密聊不再等待"}
+                        subtitleStyle={styles.itemSubTitle}
+                        rightTitle={"300.00密币"}
+                        rightTitleStyle={styles.itemRightTitle}
+                        rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
+
+                    <ListItem
+                        containerStyle={{backgroundColor: "#fefefe", marginTop: 10}}
+                        leftIcon={<Crown width={20}/>}
+                        title={"会员服务"}
+                        titleStyle={styles.itemTitle}
+                        subtitle={"多项特权，开通或续费"}
+                        subtitleStyle={styles.itemSubTitle}
+                        rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
+
+                    <ListItem
+                        containerStyle={{backgroundColor: "#fefefe", marginTop: 10}}
+                        leftIcon={<Icon name={"ios-gift"} type={"ionicon"} color={Util.color.royalblue} size={25}/>}
+                        title={"礼物收益"}
+                        titleStyle={styles.itemTitle}
+                        subtitle={"将收到的礼物兑换成收益币"}
+                        subtitleStyle={styles.itemSubTitle}
+                        rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
+
+                    <ListItem
+                        containerStyle={{backgroundColor: "#fefefe", marginTop: 10}}
+                        leftIcon={<Icon name='ios-wallet' type='ionicon' color={Util.color.lawngreen} size={25}/>}
+                        title={"收益提现"}
+                        titleStyle={styles.itemTitle}
+                        subtitle={"可以将收益币进行提现"}
+                        subtitleStyle={styles.itemSubTitle}
+                        rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
+                </View>
+
+                <View style={{flexDirection: "row", justifyContent: "space-around", backgroundColor: "#fefefe", marginTop: 12, paddingTop: 13, paddingBottom: 13}}>
+                    <View style={{alignItems: "center"}}>
+                        <Icon name={"ios-gift"} type={"ionicon"} color={Util.color.royalblue}/>
+                        <Text style={{color: Util.color.lightslategrey, fontSize: Util.dimension.content_text_size_14}}>活动列表</Text>
+                    </View>
+                    <View style={{alignItems: "center"}}>
+                        <Icon name={"directions"} type={"simple-line-icon"} color={Util.color.lawngreen}/>
+                        <Text style={{color: Util.color.lightslategrey, fontSize: Util.dimension.content_text_size_14}}>新手指南</Text>
+                    </View>
+                    <View style={{alignItems: "center"}}>
+                        <Icon name={"feed"} type={"font-awesome"} color={Util.color.fuchsia}/>
+                        <Text style={{color: Util.color.lightslategrey, fontSize: Util.dimension.content_text_size_14}}>意见反馈</Text>
+                    </View>
+                    <View style={{alignItems: "center"}}>
+                        <Icon name={"ios-settings"} type={"ionicon"} color={Util.color.limegreen}/>
+                        <Text style={{color: Util.color.lightslategrey, fontSize: Util.dimension.content_text_size_14}}>应用设置</Text>
+                    </View>
+                </View>
+
 
             </ScrollView>
         );
@@ -186,6 +250,18 @@ const styles = StyleSheet.create({
         fontSize: Util.dimension.content_text_size_12,
         color: Util.color.white,
         marginBottom: 1
+    },
+    itemTitle: {
+        color: Util.color.lightslategrey,
+        fontSize: Util.dimension.content_text_size_14
+    },
+    itemSubTitle: {
+        color: Util.color.lightslategrey,
+        fontSize: Util.dimension.content_text_size_10
+    },
+    itemRightTitle: {
+        color: Util.color.lightslategrey,
+        fontSize: Util.dimension.content_text_size_9
     }
 });
 
