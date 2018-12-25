@@ -6,9 +6,10 @@
  * 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
  * 4、ActivityIndicator: 进度条
  * 5、React-Navigation的使用：使用时需要关联react-native-gesture-handler，如果有native代码需要在Android和IOS中进行配置，详见官网
+ * 6、AsyncStorage存储数据
  */
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, Image, Modal, View, Platform, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
+import { ActivityIndicator, Alert, AsyncStorage, Image, Modal, View, Platform, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 // 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
@@ -16,6 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import Util from './utils';
+
 import HomeView from "./HomeView";
 
 export class LoginComponent extends Component {
@@ -107,7 +109,7 @@ export class LoginComponent extends Component {
         let loginResponse = await fetch("http://www.michat.ttsource.cn/login", {
                 method: "POST",
                 headers: {
-                  Accept: "application/json",
+                    Accept: "application/json",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -115,7 +117,14 @@ export class LoginComponent extends Component {
                     "credential": this.state.password
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    let token = response.headers.get("token");
+                    console.info(token);
+                    AsyncStorage.setItem("token", token);
+                    return response.json();
+                }
+            })
             .then(responseJson => {
                 if (responseJson != null && responseJson.code === 200) {
                     return responseJson;
@@ -140,8 +149,23 @@ export class LoginComponent extends Component {
         if (loginResponse.code === 200) {
             //Alert.alert("登录成功");
             // 用 Home页面来替换当前路由
+            this._storageUserInfo(loginResponse);
             this.props.navigation.replace("Home");
         }
+    }
+
+    _storageUserInfo(info) {
+        let userInfoData = info.data;
+        AsyncStorage.setItem("nickname", userInfoData.nickname);
+        AsyncStorage.setItem("age", userInfoData.age + "");
+        AsyncStorage.setItem("avatar", userInfoData.avatar);
+        AsyncStorage.setItem("address", userInfoData.address);
+        AsyncStorage.setItem("mobile", userInfoData.mobile);
+        AsyncStorage.setItem("email", userInfoData.email);
+        AsyncStorage.setItem("description", userInfoData.description);
+        AsyncStorage.setItem("city", userInfoData.city);
+        AsyncStorage.setItem("constellation", userInfoData.constellation);
+        AsyncStorage.setItem("career", userInfoData.career);
     }
 
     render() {

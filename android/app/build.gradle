@@ -98,8 +98,23 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    signingConfigs {
+            release {
+                keyAlias 'RNMiChat'
+                keyPassword 'rnmichat'
+                storeFile file('./../michat')
+                storePassword 'ttsource'
+            }
+            debug {
+                keyAlias 'RNMiChat'
+                keyPassword 'rnmichat'
+                storeFile file('./../michat')
+                storePassword 'ttsource'
+            }
+    }
+
     defaultConfig {
-        applicationId "com.rnmichat"
+        applicationId "com.ttsource.rn.michat"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -118,7 +133,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled enableProguardInReleaseBuilds
+            // 是否允许进行调试
+            debuggable false
+            // 对其开关
+            zipAlignEnabled true
+            // 签名方式
+            signingConfig signingConfigs.release
+            // 混淆开关
+            minifyEnabled false
+            // 混淆配置文件
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }

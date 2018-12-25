@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import ActivityView from "./ActivityView";
+import Personal from "./Personal";
 
 
 class Tab2Component extends Component {
@@ -41,22 +42,12 @@ class Tab3Component extends Component {
     }
 }
 
-class Tab4Component extends Component {
-    render() {
-        return(
-            <View style={{width: 200, height: 100, backgroundColor: "#AA0"}}>
-
-            </View>
-        );
-    }
-}
-
 const BottomRoute = createBottomTabNavigator(
     {
         "广场": ActivityView,
         "密聊": Tab2Component,
         "关注": Tab3Component,
-        "我": Tab4Component,
+        "我": Personal,
     },
     {
         defaultNavigationOptions: ({navigation}) => ({
