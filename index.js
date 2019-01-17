@@ -7,7 +7,8 @@ import {name as appName} from './app.json';
 // import LoginComponent from "./view/LoginComponent";
 import HomeView from "./view/HomeView";
 import TextTestCode from "./view/TextTestCode";
-import ShowView from "./view/Personal";
+import ShowView from "./view/LoginComponent";
+//import ShowView from "./view/TestCode";
 
 //AppRegistry.registerComponent(appName, () => App);
 AppRegistry.registerComponent(appName, () => ShowView);

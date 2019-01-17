@@ -8,8 +8,7 @@
  * @Brief:
  */
 import React, { Component } from 'react';
-import {AsyncStorage, Image, View, Platform, ScrollView, Text, StyleSheet } from 'react-native';
-
+import {Alert, AsyncStorage, Image, View, Platform, ScrollView, Text, StyleSheet } from 'react-native';
 
 import {Icon, ListItem} from 'react-native-elements';
 
@@ -128,7 +127,13 @@ export class PersonalInfo extends Component {
 }
 
 
-export default class extends Component {
+export default class PersonalService extends Component {
+    // 定制该模块的标题栏
+    static navigationOptions = {
+        // 隐藏标题栏
+        header: null
+    };
+
     constructor(props) {
         super(props);
         this.state = {}
@@ -141,6 +146,12 @@ export default class extends Component {
 
                 <View>
                     <ListItem
+                        underlayColor={Util.color.whitesmoke}
+                        onPress={() => {
+                            // 替换当前页面
+                            //this.props.navigation.replace("Recharge");
+                            this.props.navigation.push("Recharge")
+                        }}
                         containerStyle={{backgroundColor: "#fefefe", marginTop: 8}}
                         leftIcon={<Icon name='money' type='font-awesome' color='#A9A9A9' size={30}/>}
                         title={"充值服务"}
@@ -152,6 +163,10 @@ export default class extends Component {
                         rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
 
                     <ListItem
+                        underlayColor={Util.color.whitesmoke}
+                        onPress={() => {
+                            console.info("")
+                        }}
                         containerStyle={{backgroundColor: "#fefefe", marginTop: 10}}
                         leftIcon={<Crown width={20}/>}
                         title={"会员服务"}
@@ -161,6 +176,10 @@ export default class extends Component {
                         rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
 
                     <ListItem
+                        underlayColor={Util.color.whitesmoke}
+                        onPress={() => {
+                            console.info("")
+                        }}
                         containerStyle={{backgroundColor: "#fefefe", marginTop: 10}}
                         leftIcon={<Icon name={"ios-gift"} type={"ionicon"} color={Util.color.royalblue} size={25}/>}
                         title={"礼物收益"}
@@ -170,6 +189,10 @@ export default class extends Component {
                         rightIcon={<Icon name='ios-arrow-forward' type='ionicon' color='#778899' size={25}/>}/>
 
                     <ListItem
+                        underlayColor={Util.color.whitesmoke}
+                        onPress={() => {
+                            console.info("")
+                        }}
                         containerStyle={{backgroundColor: "#fefefe", marginTop: 10}}
                         leftIcon={<Icon name='ios-wallet' type='ionicon' color={Util.color.lawngreen} size={25}/>}
                         title={"收益提现"}
@@ -197,8 +220,6 @@ export default class extends Component {
                         <Text style={{color: Util.color.lightslategrey, fontSize: Util.dimension.content_text_size_14}}>应用设置</Text>
                     </View>
                 </View>
-
-
             </ScrollView>
         );
     }

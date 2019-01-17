@@ -99,7 +99,6 @@ export class BannerComponent extends Component {
 }
 
 
-
 export default class extends Component {
     constructor(props) {
         super(props);
@@ -108,7 +107,7 @@ export default class extends Component {
 
     render() {
         return(
-            <View style={{width: Util.size.width, height: Util.size.height, paddingTop: 50}}>
+            <View style={{width: Util.size.width, height: Util.size.height}}>
                 <BannerComponent bannerUrl={"http://www.michat.ttsource.cn/banner/1"}/>
             </View>
         );

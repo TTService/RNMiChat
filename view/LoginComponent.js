@@ -8,17 +8,27 @@
  * 5、React-Navigation的使用：使用时需要关联react-native-gesture-handler，如果有native代码需要在Android和IOS中进行配置，详见官网
  * 6、AsyncStorage存储数据
  */
-import React, { Component } from 'react';
-import { ActivityIndicator, Alert, AsyncStorage, Image, Modal, View, Platform, Text, TextInput, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native';
+import React, {Component} from 'react';
+import {
+    ActivityIndicator,
+    Alert,
+    AsyncStorage,
+    Image,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-// 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
-
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 import Util from './utils';
 
 import HomeView from "./HomeView";
+
+// 在React v15.5后，React.PropTypes被抛弃，采用 yarn add prop-types导入，在import
 
 export class LoginComponent extends Component {
 
@@ -106,7 +116,7 @@ export class LoginComponent extends Component {
             loginLoading: true,
         });
 
-        let loginResponse = await fetch("http://www.michat.ttsource.cn/login", {
+        let loginResponse = await fetch("https://www.michat.ttsource.cn/login", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -150,6 +160,7 @@ export class LoginComponent extends Component {
             //Alert.alert("登录成功");
             // 用 Home页面来替换当前路由
             this._storageUserInfo(loginResponse);
+            // 替换当前页面
             this.props.navigation.replace("Home");
         }
     }
@@ -339,8 +350,15 @@ export class LoginComponent extends Component {
 
 const LoginStack = createStackNavigator(
     {
-        Login: LoginComponent,
-        Home: HomeView,
+        Login: {
+            screen: LoginComponent,
+        },
+        Home: {
+            screen: HomeView,
+            navigationOptions: {
+                header: null,
+            }
+        },
     },
     {
         initialRouteName: "Login"
@@ -350,13 +368,15 @@ const LoginStack = createStackNavigator(
 
 const AppContainer = createAppContainer(LoginStack);
 
-export default class App extends Component {
+export default AppContainer;
+
+/*export default class App extends Component {
     render() {
         return(
             <AppContainer/>
         );
     }
-}
+}*/
 
 const styles = StyleSheet.create({
     logo: {

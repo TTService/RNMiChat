@@ -13,13 +13,14 @@
  *
  */
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import ActivityView from "./ActivityView";
 import Personal from "./Personal";
+import RechargeView from "./RechargeView";
 
 
 class Tab2Component extends Component {
@@ -42,25 +43,45 @@ class Tab3Component extends Component {
     }
 }
 
-const BottomRoute = createBottomTabNavigator(
+const TabNavigation = createBottomTabNavigator(
     {
-        "广场": ActivityView,
-        "密聊": Tab2Component,
-        "关注": Tab3Component,
-        "我": Personal,
+        Active: {
+            screen: ActivityView,
+            navigationOptions: {
+                tabBarLabel: "广场",
+            }
+        },
+        SecondPage: {
+            screen: Tab2Component,
+            navigationOptions: {
+                tabBarLabel: "密聊",
+            }
+        },
+        ThirdPage: {
+            screen: Tab3Component,
+            navigationOptions: {
+                tabBarLabel: "关注"
+            }
+        },
+        Personnel: {
+            screen: Personal,
+            navigationOptions: {
+                tabBarLabel: "我"
+            }
+        }
     },
     {
         defaultNavigationOptions: ({navigation}) => ({
             tabBarIcon: ({focused, horizontal, tintColor}) => {
                 const {routeName} = navigation.state;
                 let iconName;
-                if (routeName === '广场') {
+                if (routeName === 'Active') {
                     iconName = `ios-star${focused ? '' : '-outline'}`;
-                } else if (routeName === '密聊') {
+                } else if (routeName === 'SecondPage') {
                     iconName = `ios-chatbubbles${focused ? '' : ''}`;
-                } else if (routeName === '关注') {
+                } else if (routeName === 'ThirdPage') {
                     iconName = `ios-water${focused ? '' : ''}`;
-                } else if (routeName === '我') {
+                } else if (routeName === 'Personnel') {
                     iconName = `ios-person${focused ? '' : ''}`;
                 }
 
@@ -76,9 +97,40 @@ const BottomRoute = createBottomTabNavigator(
     }
 );
 
-const App = createAppContainer(BottomRoute);
+//设置TabBar的title，如果和NavBar混合使用，这个是必须的
+TabNavigation.navigationOptions = ({ navigation }) => {
+    let { routeName } = navigation.state.routes[navigation.state.index];
 
-export default class extends Component {
+    let headerTitle = "";
+    if (routeName === 'Active') {
+        headerTitle = '广场';
+    } else if (routeName === 'SecondPage') {
+        headerTitle = '密聊';
+    }  else if (routeName === 'ThirdPage') {
+        headerTitle = '关注';
+    }  else {
+        headerTitle = '我';
+    }
+    return {
+        headerTitle
+    };
+};
+
+const HomeStack = createStackNavigator({
+    Tab: {
+        screen: TabNavigation,
+    },
+    Recharge: {
+        screen: RechargeView,
+        navigationOptions: {
+            title: "Recharge"
+        }
+    },
+});
+
+const App = createAppContainer(HomeStack);
+
+/*export default class extends Component {
     static navigationOptions = {
         header: null
     };
@@ -88,4 +140,5 @@ export default class extends Component {
             <App/>
         );
     }
-}
+}*/
+export default App
